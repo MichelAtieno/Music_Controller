@@ -8,6 +8,18 @@ import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-ro
 export default class HomePage extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            roomCode: null,
+        };
+    }
+
+    async componentDidMount() {
+      fetch('/api/user-in-room').then((response) => response.json())
+      .then((data) => {
+          this.setState({
+              roomCode: data.code
+          });
+      });      
     }
 
     renderHomePage(){
@@ -21,7 +33,7 @@ export default class HomePage extends Component {
                 <Grid item xs={12} align="center">
                     <ButtonGroup disableElevation variant="contained" color="primary">
                         <Button color="primary" to="/join" component={ Link}>
-                            Join a room
+                            Join a room)     
                         </Button>
                         <Button color="secondary" to="/create" component={ Link}>
                             Create a room
@@ -37,9 +49,10 @@ export default class HomePage extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route exact path="/">
-                        {this.renderHomePage()}
-                    </Route>
+                    <Route exact path="/" render={() => {
+                        return this.state.roomCode ? (<Redirect to={`/room/${this.state.roomCode}`} />
+                        ) : (this.renderHomePage());
+                    }} />
                     <Route path='/join' component={RoomJoinPage} />
                     <Route path='/create' component={CreateRoomPage} />
                     <Route path="/room/:roomCode" component={Room} />
