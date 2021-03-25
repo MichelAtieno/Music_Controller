@@ -19,10 +19,18 @@ export default class Room extends Component {
         this.renderSettingsButton = this.renderSettingsButton.bind(this);
         this.renderSettings = this.renderSettings.bind(this);
         this.getRoomDetails = this.getRoomDetails.bind(this);
-        this.authenticateSpotify = this.authenticateSpotify.bind(this)
+        this.authenticateSpotify = this.authenticateSpotify.bind(this);
+        this.getCurrentSong = this.getCurrentSong.bind(this);
         this.getRoomDetails();
-        this.getCurrentSong();
     }  
+
+    componentDidMount() {
+        this.interval = setInterval(this.getCurrentSong, 1000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
     getRoomDetails(){
         fetch('/api/get-room' + '?code=' + this.roomCode)
@@ -66,9 +74,12 @@ export default class Room extends Component {
             if (!response.ok) {
                 return {};    
             } else {
-                response.json();
+                return response.json();
             }
-        }).then((data) => this.setState({song: data}));
+        }).then((data) => {
+            this.setState({song: data});
+            console.log(data);
+        });
     }
 
     leaveButtonPressed(){
