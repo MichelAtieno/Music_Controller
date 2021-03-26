@@ -62,7 +62,6 @@ class CurrentSong(APIView):
         host = room.host
         endpoint = "player/currently-playing"
         response = execute_spotify_api_request(host, endpoint)
-        print(response)
 
         if 'error' in response or 'item' not in response:
             return Response({}, status=status.HTTP_204_NO_CONTENT)
@@ -94,3 +93,37 @@ class CurrentSong(APIView):
         
         
         return Response(song, status=status.HTTP_200_OK)
+
+class PauseSong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            pause_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+class PlaySong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            play_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+class SkipSong(APIView):
+    def post(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+
+        if self.request.session.session_key == room.host:
+            skip_song(room.host)
+        else:
+            pass
+
+        return Response({}, status.HTTP_204_NO_CONTENT)
+
+   
