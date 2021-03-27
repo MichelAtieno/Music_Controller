@@ -18,9 +18,9 @@ export default class MusicPlayer extends Component {
   skipSong() {
     const requestOptions = {
       method: "POST",
-      headers: {'Content-Type': 'application/json' }
+      headers: {"Content-Type": "application/json" },
     };
-    fetch('/spotify/skip', requestOptions);
+    fetch("/spotify/skip", requestOptions);
   }
 
   pauseSong() {
