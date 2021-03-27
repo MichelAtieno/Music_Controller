@@ -1,3 +1,5 @@
-CLIENT_ID = "a50514d155a6486ca0931675ff92d728"
-CLIENT_SECRET = "2bf64c65660540168ebdc71d19dfe546"
-REDIRECT_URI = "http://127.0.0.1:8000/spotify/redirect"
+from music_controller.settings import CLIENT_ID, CLIENT_SECRET
+
+CLIENT_ID=CLIENT_ID
+CLIENT_SECRET=CLIENT_SECRET
+REDIRECT_URI="http://127.0.0.1:8000/spotify/redirect"
