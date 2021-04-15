@@ -10,8 +10,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Collapse } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert"
-
+import Alert from "@material-ui/lab/Alert";
 
 export default class CreateRoomPage extends Component {
   static defaultProps = {
@@ -20,7 +19,6 @@ export default class CreateRoomPage extends Component {
     update: false,
     roomCode: null,
     updateCallback: () => {},
-
   };
 
   constructor(props) {
@@ -29,7 +27,7 @@ export default class CreateRoomPage extends Component {
       guestCanPause: this.props.guestCanPause,
       votesToSkip: this.props.votesToSkip,
       errorMsg: "",
-      successMsg: "" 
+      successMsg: "",
     };
 
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
@@ -61,7 +59,7 @@ export default class CreateRoomPage extends Component {
     };
     fetch("/api/create-room", requestOptions)
       .then((response) => response.json())
-      .then((data) =>this.props.history.push("/room/" + data.code) );
+      .then((data) => this.props.history.push("/room/" + data.code));
   }
 
   handleUpdateButtonPressed() {
@@ -71,23 +69,21 @@ export default class CreateRoomPage extends Component {
       body: JSON.stringify({
         votes_to_skip: this.state.votesToSkip,
         guest_can_pause: this.state.guestCanPause,
-        code: this.props.roomCode
+        code: this.props.roomCode,
       }),
     };
-    fetch("/api/update-room", requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          this.setState({
-            successMsg : "Room updated successfully!"
-          });
-        } else {
-          this.setState({
-            errorMsg : "Error updating room!..."
-          });
-        }
-        this.props.updateCallback();
-      });
-     
+    fetch("/api/update-room", requestOptions).then((response) => {
+      if (response.ok) {
+        this.setState({
+          successMsg: "Room updated successfully!",
+        });
+      } else {
+        this.setState({
+          errorMsg: "Error updating room...",
+        });
+      }
+      this.props.updateCallback();
+    });
   }
 
   renderCreateButtons() {
@@ -100,7 +96,7 @@ export default class CreateRoomPage extends Component {
             onClick={this.handleRoomButtonPressed}
           >
             Create A Room
-            </Button>
+          </Button>
         </Grid>
         <Grid item xs={12} align="center">
           <Button color="secondary" variant="contained" to="/" component={Link}>
@@ -114,13 +110,13 @@ export default class CreateRoomPage extends Component {
   renderUpdateButtons() {
     return (
       <Grid item xs={12} align="center">
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={this.handleUpdateButtonPressed}
-          >
-            Update Room
-          </Button>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={this.handleUpdateButtonPressed}
+        >
+          Update Room
+        </Button>
       </Grid>
     );
   }
@@ -131,7 +127,7 @@ export default class CreateRoomPage extends Component {
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
-        <Collapse
+          <Collapse
             in={this.state.errorMsg != "" || this.state.successMsg != ""}
           >
             {this.state.successMsg != "" ? (
@@ -190,8 +186,8 @@ export default class CreateRoomPage extends Component {
             <TextField
               required={true}
               type="number"
-              defaultValue={this.state.votesToSkip}
               onChange={this.handleVotesChange}
+              defaultValue={this.state.votesToSkip}
               inputProps={{
                 min: 1,
                 style: { textAlign: "center" },
@@ -202,21 +198,9 @@ export default class CreateRoomPage extends Component {
             </FormHelperText>
           </FormControl>
         </Grid>
-        <Grid item xs={12} align="center">
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={this.handleRoomButtonPressed}
-          >
-            Create A Room
-          </Button>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Button color="secondary" variant="contained" to="/" component={Link}>
-            Back
-          </Button>
-        </Grid>
-        {this.props.update ? this.renderUpdateButtons() : this.renderCreateButtons()}
+        {this.props.update
+          ? this.renderUpdateButtons()
+          : this.renderCreateButtons()}
       </Grid>
     );
   }
